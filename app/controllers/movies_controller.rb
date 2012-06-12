@@ -7,7 +7,11 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @movies = Movie.order(params[:sort]).all
+    @param = params[:sort]
+
+    #setting controller variables that are used to conditionally set the CSS class of the appropriate table heading to hilite
+
   end
 
   def new
@@ -37,5 +41,10 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+
+  def sort_by
+
+  end
+
 
 end
