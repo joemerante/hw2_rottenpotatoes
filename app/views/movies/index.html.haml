@@ -1,12 +1,24 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
+= puts params.inspect
+
+= form_tag movies_path(:ratings => params[:rating]), :method => :get, :id => 'ratings_form' do
+  = hidden_field_tag({:sort => params[:sort], :ratings => params[:ratings]})
+  =# hidden_field_tag :ratings, params[:ratings]
+  Include: 
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating)
+  = submit_tag 'Refresh', :id => 'ratings_submit'
+
+
 %table#movies
   %thead
     %tr
-      %th{:class => ('hilite' if @param == "title")}= link_to "Movie Title", {:sort => "title"}, :id => "title_header"
+      %th{:class => ('hilite' if params[:sort] == "title")}= link_to "Movie Title", movies_path( :sort => "title", :ratings => params[:ratings] ), :id => "title_header"
       %th Rating
-      %th{:class => ('hilite' if @param == "release_date")}= link_to "Release Date", {:sort => "release_date"}, :id => "release_date_header"
+      %th{:class => ('hilite' if params[:sort] == "release_date")}= link_to "Release Date", movies_path(:sort => "release_date", :ratings => @selected_ratings), :id => "release_date_header"
       %th More Info
   %tbody
     - @movies.each do |movie|
@@ -17,6 +29,3 @@
         %td= link_to "More about #{movie.title}", movie_path(movie)
 
 = link_to 'Add new movie', new_movie_path
-
-
-/movies?id=title_header&sort=title

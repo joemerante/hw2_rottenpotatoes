@@ -7,11 +7,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort]).all
-    @param = params[:sort]
-
-    #setting controller variables that are used to conditionally set the CSS class of the appropriate table heading to hilite
-
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings] || {}
+    @movies = Movie.find_all_by_rating(@selected_ratings.keys)
   end
 
   def new
